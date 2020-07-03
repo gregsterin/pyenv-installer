@@ -1,21 +1,15 @@
 #!/usr/bin/env bash
-
-if [[ -z PYENV_PACKAGE_ARCHIVE_URL ]]; then
-  PYENV_PACKAGE_ARCHIVE_URL=
-fi
+# from https://github.com/gregsterin/pyenv-installer
 
 set -o errexit
 set -o pipefail
 set -o nounset
 
-PYENV_ROOT=
-PYENV_PACKAGE_ARCHIVE=
+PYENV_PACKAGE_ARCHIVE_URL="${PYENV_PACKAGE_ARCHIVE_URL:-}"
+PYENV_ROOT="${PYENV_ROOT:-}"
+PYENV_PACKAGE_ARCHIVE="${PYENV_PACKAGE_ARCHIVE:-}"
+PYENV_DEBUG="${PYENV_DEBUG:-}"
 
-if [[ -z PYENV_PACKAGE_ARCHIVE_URL ]]; then
-  PYENV_PACKAGE_ARCHIVE_URL=
-fi
-
-set -e
 [ -n "$PYENV_DEBUG" ] && set -x
 
 if [ -z "$PYENV_ROOT" ]; then
@@ -38,7 +32,7 @@ if [ -d "${PYENV_ROOT}" ]; then
     exit 1
 fi
 
-shell="$1"
+shell="${1:-}"
 if [ -z "$shell" ]; then
   shell="$(ps c -p "$PPID" -o 'ucomm=' 2>/dev/null || true)"
   shell="${shell##-}"
