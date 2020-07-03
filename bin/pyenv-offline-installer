@@ -1,5 +1,20 @@
 #!/usr/bin/env bash
 
+if [[ -z PYENV_PACKAGE_ARCHIVE_URL ]]; then
+  PYENV_PACKAGE_ARCHIVE_URL=
+fi
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+PYENV_ROOT=
+PYENV_PACKAGE_ARCHIVE=
+
+if [[ -z PYENV_PACKAGE_ARCHIVE_URL ]]; then
+  PYENV_PACKAGE_ARCHIVE_URL=
+fi
+
 set -e
 [ -n "$PYENV_DEBUG" ] && set -x
 
@@ -43,6 +58,11 @@ fi
 # PYENV_PACKAGE_ARCHIVE is the path of pyenv compressed archive file.
 if [ -z "$PYENV_PACKAGE_ARCHIVE" ]; then
   PYENV_PACKAGE_ARCHIVE="$(cd $(dirname "$0") && pwd)/pyenv-package.tar.gz"
+fi
+
+# PYENV_PACKAGE_ARCHIVE_URL will first download from the url to PYENV_PACKAGE_ARCHIVE if set
+if [ ! -z "$PYENV_PACKAGE_ARCHIVE_URL" ]; then
+  curl -s -S -L "$PYENV_PACKAGE_ARCHIVE_URL" -o "$PYENV_PACKAGE_ARCHIVE"
 fi
 
 if [ ! -e "$PYENV_PACKAGE_ARCHIVE" ]; then
